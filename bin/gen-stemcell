@@ -39,12 +39,11 @@ else
 end
 
 work_dir = `mktemp -d`.strip
-runner = Bosh::Stemcell::StageRunner.new(stages: %W{base_debootstrap base_apt},
-                                         build_path: File.join(%W{#{bosh_path} stemcell_builder}),
+runner = Bosh::Stemcell::StageRunner.new(build_path: File.join(%W{#{bosh_path} stemcell_builder}),
                                          command_env: "",
                                          settings_file: settings_file,
                                          work_path: work_dir)
-runner.configure_and_apply
+runner.configure_and_apply(%W{base_debootstrap base_apt})
 system("tar -C #{work_dir}/work/chroot -czf #{out_file} .")
 
 puts "Done."
